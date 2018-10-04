@@ -4,7 +4,7 @@ import List from './list';
 import AddItem from './add_item';
 // import listData from '../data/list';
 import axios from 'axios';
-import { ESRCH } from 'constants';
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -59,7 +59,8 @@ class App extends Component {
         // this.setState({
         //     list: [item, ...this.state.list]
         // });
-//p2 delete all old list on dom, call server pull data and show all/replace all on Dom , rebuild DOM 
+        
+        //p2 delete all old list on dom, call server pull data and show all/replace all on Dom , rebuild DOM 
          try{
             const response = await axios.post(`${this.base_url}/todos${this.api_key}`, item);
             console.log(response);
@@ -70,13 +71,21 @@ class App extends Component {
 
     }
 
+    //delete item
+    async deleteItem(id) {
+        console.log('delete item id ', id);
+        const response = await axios.delete(`${this.base_url}/todos/${id}${this.api_key}`);
+        console.log('delete response ', response);
+        this.getListData();
+    }
+
     render() {
         console.log('app state', this.state);
         return (
                 <div className="container">
                     <h1 className="center">To Do List</h1>
                     <AddItem add={ this.addItem.bind(this)}/>
-                    <List data={ this.state.list }/> 
+                    <List data={ this.state.list }  delete={this.deleteItem.bind(this)}/> 
                 </div>
             );
     }
